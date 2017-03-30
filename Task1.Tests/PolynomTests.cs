@@ -11,15 +11,6 @@ namespace Task1.Tests
     [TestFixture]
     public class PolynomTests
     {
-        [TestCase(new double[] { }, ExpectedResult = 0)]
-        [TestCase(new double[] {1, 2, 4.5 }, ExpectedResult = 2)]
-        [TestCase(new double[] { 0.3}, ExpectedResult = 0)]
-        public int Constructor_Positive(double[] array)
-        {
-            Polynom polynom = new Polynom(array);
-            return polynom.Power;
-        }
-
         [TestCase(null)]
         public void Constructor_ArgumentNullException(double[] array)
         {
@@ -52,32 +43,32 @@ namespace Task1.Tests
             return aPolynom.Equals(bPolynom);
         }
 
-        [TestCase(new double[] {1,2.3 }, new double[] { 1, 1, -1}, ExpectedResult = new double[] { 2, 3.3, -1 })]
-        [TestCase(new double[] { 1, 2.3 }, new double[] { 1, 1 }, ExpectedResult = new double[] { 2, 3.3 })]
-        [TestCase(new double[] { 1, 2.3 }, new double[] {  }, ExpectedResult = new double[] { 1, 2.3 })]
-        public double[] Add_Positive(double[] a, double[] b)
+        [TestCase(new double[] {1,2.3 }, new double[] { 1, 1, -1}, new double[] { 2, 3.3, -1 })]
+        [TestCase(new double[] { 1, 2.3 }, new double[] { 1, 1 }, new double[] { 2, 3.3 })]
+        [TestCase(new double[] { 1, 2.3 }, new double[] {  }, new double[] { 1, 2.3 })]
+        public void Add_Positive(double[] a, double[] b, double[] expected)
         {
             Polynom result = new Polynom(a) + new Polynom(b);
-            return result.Coefficients;
+            Assert.AreEqual(result, new Polynom(expected));
         }
 
-        [TestCase(new double[] { 1, 2 }, new double[] { 1, 1, -1 }, ExpectedResult = new double[] { 0, 1, 1 })]
-        [TestCase(new double[] { 1, 2 }, new double[] { 1, 1 }, ExpectedResult = new double[] { 0, 1 })]
-        [TestCase(new double[] { }, new double[] { }, ExpectedResult = new double[] { })]
-        [TestCase(new double[] {1,2 }, new double[] { }, ExpectedResult = new double[] {1,2 })]
-        public double[] Substract_Positive(double[] a, double[] b)
+        [TestCase(new double[] { 1, 2 }, new double[] { 1, 1, -1 }, new double[] { 0, 1, 1 })]
+        [TestCase(new double[] { 1, 2 }, new double[] { 1, 1 }, new double[] { 0, 1 })]
+        [TestCase(new double[] { }, new double[] { }, new double[] { })]
+        [TestCase(new double[] {1,2 }, new double[] { }, new double[] {1,2 })]
+        public void Substract_Positive(double[] a, double[] b, double[] expected)
         {
             Polynom result = new Polynom(a) - new Polynom(b);
-            return result.Coefficients;
+            Assert.AreEqual(result, new Polynom(expected));
         }
 
-        [TestCase(new double[] { 1, 2.3 }, new double[] { 1, 1, -1 }, ExpectedResult = new double[] { 1, 2.3, -1 })]
-        [TestCase(new double[] { 1, 2.3 }, new double[] { 1, 1 }, ExpectedResult = new double[] { 1, 2.3 })]
-        [TestCase(new double[] { 1, 2.3 }, new double[] { }, ExpectedResult = new double[] { 1, 2.3 })]
-        public double[] Mul_Positive(double[] a, double[] b)
+        [TestCase(new double[] { 1, 2.3 }, new double[] { 1, 1, -1 }, new double[] { 1, 2.3, -1 })]
+        [TestCase(new double[] { 1, 2.3 }, new double[] { 1, 1 }, new double[] { 1, 2.3 })]
+        [TestCase(new double[] { 1, 2.3 }, new double[] { }, new double[] { 1, 2.3 })]
+        public void Mul_Positive(double[] a, double[] b, double[] expected)
         {
             Polynom result = new Polynom(a) * new Polynom(b);
-            return result.Coefficients;
+            Assert.AreEqual(result, new Polynom(expected));
         }
 
         [TestCase(new double[] { 1, 2.3 }, ExpectedResult ="1,00*x+2,30")]
