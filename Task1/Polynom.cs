@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using System.Configuration;
 
 namespace Task1
 {
@@ -8,14 +9,36 @@ namespace Task1
     {
         #region private fields
         internal double[] _coefficients;
+        private static double epsilon;
         #endregion
 
         #region public properties
         public double this[int index] => _coefficients[index];
+        public int Power
+        {
+            get
+            {
+                for (int i=_coefficients.Length; i>=0; i--)
+                    if (_coefficients[i] > epsilon) return i;
+                return 0;
+            }
+        }
         #endregion
 
         #region public methods
-        #region constructors        
+        #region constructors 
+        static Polynom()
+        {
+            try
+            {
+                epsilon = double.Parse(ConfigurationManager.AppSettings["epsilon"]);
+            }
+            catch
+            {
+                epsilon = 0.0000001;
+            }
+        }   
+           
         /// <summary>
         /// Initializes a new instance of the <see cref="Polynom"/> class.
         /// </summary>
@@ -182,14 +205,19 @@ namespace Task1
             const int visiblePower = 1;
 
             int power = _coefficients.Length - 1;
+            bool firstsign = true;
             string result = string.Empty;
             for (int i = 0; i < _coefficients.Length; i++)
             {
-                string sign = (i == 0 || _coefficients[i] < 0) ? string.Empty : "+";
-                string coefficient = _coefficients[i].ToString("F");
-                string variable = (i != _coefficients.Length - 1) ? "*x" : string.Empty;
-                string n = (power - i > visiblePower) ? "^" + (power - i) : string.Empty;
-                result += $"{sign}{coefficient}{variable}{n}";
+                if (Math.Abs(_coefficients[i]) > epsilon)
+                {
+                    string sign = (firstsign || _coefficients[i] < 0) ? string.Empty : "+";
+                    string coefficient = _coefficients[i].ToString("F");
+                    string variable = (i != _coefficients.Length - 1) ? "*x" : string.Empty;
+                    string n = (power - i > visiblePower) ? "^" + (power - i) : string.Empty;
+                    result += $"{sign}{coefficient}{variable}{n}";
+                    firstsign = false;
+                }
             }
 
             return result;
